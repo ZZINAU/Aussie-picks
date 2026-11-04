@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>ALO 代購下單</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +55,7 @@ h2{font-size:16px;margin:0;font-weight:700;letter-spacing:.04em}
 .idx{font-family:var(--f-num);font-size:12px;color:var(--muted);min-width:22px}
 .tag{font-size:11px;padding:1px 7px;border-radius:4px;background:var(--accent);color:var(--accent-ink)}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media (min-width:560px){.fields{grid-template-columns:minmax(0,1fr) 110px 80px}.fields .span2{grid-column:1/-1}}
+@media (min-width:560px){.fields{grid-template-columns:minmax(0,1fr) 110px 110px 76px}.fields .span2{grid-column:1/-1}}
 label{display:grid;gap:4px;font-size:12px;color:var(--muted)}
 input,select{font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
 input[type=number]{font-family:var(--f-num)}
@@ -78,7 +77,7 @@ button{font:inherit;cursor:pointer;border-radius:8px}
 .line{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
 .line span:last-child{font-family:var(--f-num);font-variant-numeric:tabular-nums;white-space:nowrap}
 .total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:12px}
-.total .num{font-family:var(--f-num);font-size:20px;font-weight:700;color:var(--total);font-variant-numeric:tabular-nums}
+.total .num{font-family:var(--f-num);font-size:26px;font-weight:700;color:var(--total);font-variant-numeric:tabular-nums}
 .alert{font-size:13px;background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:10px 12px;margin:10px 0 0}
 .primary{width:100%;margin-top:8px;padding:13px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:15px}
 .copied{font-size:13px;color:var(--muted);text-align:center;margin-top:8px;min-height:1.2em}
@@ -93,6 +92,13 @@ button{font:inherit;cursor:pointer;border-radius:8px}
 .recv{display:grid;grid-template-columns:1fr;gap:10px}
 @media (min-width:560px){.recv{grid-template-columns:1fr 1fr}}
 .req{color:var(--maroon)}
+.pv{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px}
+.pv img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--soft)}
+.pv-t{display:grid;gap:2px;min-width:0;font-size:13.5px}
+.pv-t span{font-family:var(--f-num);font-size:12.5px;color:var(--total)}
+.pv-msg{margin:0;font-size:13px;color:var(--muted)}
+.pvwrap:empty{display:none}
+input[readonly]{background:var(--soft)}
 .warnbox{margin:0;font-size:13.5px;line-height:1.75;background:var(--warn-bg);color:var(--ink);border-radius:8px;padding:10px 12px}
 .warnbox b{color:var(--warn)}
 .steps{margin:14px 0 0;padding-left:18px;font-size:13px;color:var(--muted);display:grid;gap:2px}
@@ -120,7 +126,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
     <div class="brand">ALO · Australia → Taiwan</div>
     <h1><span class="en">ALO</span> 代購下單</h1>
     <div class="terms" id="terms"></div>
-    <p class="note">嗨～歡迎來到 zzinau 的 ALO 代購 🩵 貼上 ALO 澳洲官網的商品連結，填好顏色、尺寸、數量和類別，再填收件資料就可以囉！</p>
+    <p class="note">嗨～歡迎來到 zzinau 的 ALO 代購 🩵 貼上 ALO 澳洲官網的商品連結，確認官網原價、選好尺寸和數量，總價就會自動算出來囉！</p>
   </header>
 
   <div class="grid">
@@ -133,7 +139,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
         <label>你的名字／IG
           <input id="who" type="text" placeholder="例：王小美 @xiaomei" autocomplete="off">
         </label>
-        <p class="warnbox">🩵 <b>請一定要自己填顏色和尺寸喔！</b>官網連結常常會預設成別的顏色或尺寸，我們下單一律以你填的為準，送出前麻煩再幫我們核對一次 🤍<br>🩵 <b>填寫內容請跟澳洲官網的選項一模一樣～</b>例如鞋子想買台灣的 23 號，請填官網上顯示的 W 尺寸（像是 W6），不然我們會沒辦法幫你採買喔！</p>
+        <p class="warnbox">🩵 <b>貼上 ALO 澳洲官網的商品連結</b>，價格和顏色會自動帶入～沒有自動帶入的話，請照官網上的<b>澳幣原價</b>自己填喔！<br>🩵 <b>尺寸請一定要自己從選單選喔！</b>官網連結常常預設成別的尺寸，我們一律以你選的為準。鞋子是官網的 W 尺寸，台灣 23 號請對照官網尺寸表選擇，送出前麻煩再幫我們核對一次 🤍</p>
         <div class="stack" id="items"></div>
         <button class="add" id="addBtn" type="button">＋ 新增一件商品</button>
       </section>
@@ -169,7 +175,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
     <aside class="panel summary" aria-live="polite">
       <h2>訂單摘要</h2>
       <div id="lines"></div>
-      <div class="total"><span>總價</span><span class="num" id="total">待確認</span></div>
+      <div class="total"><span>試算總價</span><span class="num" id="total">NT$0</span></div>
       <p class="note" id="formula"></p>
       <p class="alert" id="alert" hidden></p>
       <ol class="steps"><li>先按「複製明細」保存</li><li>再按「送出訂單」</li><li>截圖私訊 LINE 官方帳號，跟我們核對 🩵</li></ol>
@@ -199,13 +205,13 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
 /* ===== Karoline 每次活動只要改這裡 ===== */
 const CONFIG = {
   discount: 0.30,        // 本次活動折扣（0.30 = 打七折）
-  rate: 23,            // 匯率 A$1 = NT$
-  feeSmall: 0.15,        // 衣服/褲/鞋 1–2 件
-  feeLarge: 0.13,        // 衣服/褲/鞋 3 件以上
-  largeFrom: 3,
+  rate: 23,              // 匯率 A$1 = NT$
+  feeSmall: 0.13,        // 衣服/褲/鞋 1–9 件
+  feeLarge: 0.10,        // 衣服/褲/鞋 10 件以上
+  largeFrom: 10,
   directMin: 10,         // 直寄門檻（含小配件）
   storeFee: 60,          // 7-11 店到店（每單）
-  orderUrl: 'https://script.google.com/macros/s/AKfycbyUvSzmc3Oych1pr1iLUY4Mk6va5gaF6bh-FRVivQtCvmljDMGDyGxU-lJp5RlSj5sU/exec'           // Google Apps Script 網址（貼上後才能送出訂單）
+  orderUrl: 'https://script.google.com/macros/s/AKfycbyUvSzmc3Oych1pr1iLUY4Mk6va5gaF6bh-FRVivQtCvmljDMGDyGxU-lJp5RlSj5sU/exec'
 };
 const CATS = [
   {id:'light', name:'小件（薄的衣物）', hint:'例如 上衣、bra、背心、所有短褲、短裙', ship:80,  counts:true},
@@ -219,49 +225,122 @@ const CATS = [
 const $ = id => document.getElementById(id);
 const pct = n => Math.round(n*100) + '%';
 const nt = n => 'NT$' + Math.round(n).toLocaleString('en-US');
-const KEY = 'alo-order-v3';
+const aud = n => 'A$' + (Math.round(n*100)/100).toLocaleString('en-US');
+const zhe = () => Math.round((1-CONFIG.discount)*100)/10;
+const KEY = 'alo-order-v5';
+const blank = () => ({link:'',color:'',size:'',qty:1,cat:'light',price:''});
 
-const EXAMPLES = [
-  {link:'https://www.aloyoga.com/en-au/products/…（範例）', color:'Black', size:'S', qty:1, cat:'heavy', ex:true},
-  {link:'https://www.aloyoga.com/en-au/products/…（範例）', color:'White', size:'One Size', qty:2, cat:'acc', ex:true}
-];
-let state = {who:'', ship:'pool', items: EXAMPLES.map(o=>({...o}))};
-try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && Array.isArray(s.items)) state = s; } catch(e){}
+let state = {who:'', ship:'pool', items:[blank()]};
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && Array.isArray(s.items) && s.items.length) state = s; } catch(e){}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} };
+const P = {}; // product cache by handle
 
-function catOptions(sel){
-  return CATS.map(c => `<option value="${c.id}"${c.id===sel?' selected':''}>${c.name}${c.hint?' · '+c.hint:''}</option>`).join('');
-}
 function esc(s){return String(s??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}
+function catOptions(sel){ return CATS.map(c => `<option value="${c.id}"${c.id===sel?' selected':''}>${c.name}${c.hint?' · '+c.hint:''}</option>`).join(''); }
+const handleOf = link => { const m = String(link||'').match(/aloyoga\.com\/.*?products\/([a-z0-9\-]+)/i); return m ? m[1].toLowerCase() : null; };
+function guessCat(p){
+  const t = (p.product_type+' '+p.title).toLowerCase();
+  if (/shoe|sneaker|boot|slide|clog|mule|recovery|sandal|runner/.test(t)) return /recovery|boot/.test(t) ? 'heavyshoe' : 'shoe';
+  if (/sock|hat|cap|beanie|bag|tote|scrunchie|headband|hair|bottle|mat\b|strap|towel|keychain|belt|glove|accessor/.test(t)) return 'acc';
+  if (/short|skirt|skort/.test(t)) return 'light';
+  if (/legging|pant|jogger|trouser|jacket|hoodie|sweatshirt|sweater|pullover|coat|puffer|cardigan|fleece|onesie|bodysuit|unitard|flare/.test(t)) return 'heavy';
+  return 'light';
+}
+function optIndex(p, re){ return p.options.findIndex(o=>re.test(o.name)); }
+function sizesOf(p){ const i = optIndex(p,/size/i); return i<0 ? [] : p.options[i].values; }
+function colorOf(p){ const i = optIndex(p,/colou?r/i); return i<0 ? '' : p.options[i].values.join(' / '); }
+function fetchedPrice(it){
+  const p = P[handleOf(it.link)]; if (!p || p.err || p.loading) return null;
+  const si = optIndex(p,/size/i);
+  const v = (si>=0 && it.size && p.variants.find(v=>v['option'+(si+1)]===it.size)) || p.variants[0];
+  return parseFloat(v.price);
+}
+function priceOf(it){ const v = parseFloat(it.price); return v>0 ? v : null; }
 
-function renderItems(){
-  $('items').innerHTML = state.items.map((it,i)=>`
-    <div class="item${it.ex?' example':''}" data-i="${i}">
-      <div class="item-top"><span class="idx">${String(i+1).padStart(2,'0')}</span>${it.ex?'<span class="tag">範例，請改成你的商品</span>':''}
+async function loadProduct(i){
+  const it = state.items[i], h = handleOf(it.link);
+  if (!h) { paintItem(i); update(); return; }
+  if (P[h] && !P[h].loading) { applyProduct(i); return; }
+  P[h] = {loading:true}; paintItem(i);
+  try{
+    const r = await fetch(`https://www.aloyoga.com/en-au/products/${h}.json?country=AU&currency=AUD`, {credentials:'omit'});
+    if (!r.ok) throw new Error(r.status);
+    const p = (await r.json()).product;
+    if (!p || !p.variants?.length) throw new Error('empty');
+    P[h] = p;
+  }catch(e){ P[h] = {err:true}; }
+  state.items.forEach((x,j)=>{ if (handleOf(x.link)===h) applyProduct(j); });
+}
+function applyProduct(i){
+  const it = state.items[i], p = P[handleOf(it.link)];
+  if (p && !p.err && !p.loading){
+    if (it.h !== handleOf(it.link)){            // new link → reset fields from product
+      it.h = handleOf(it.link);
+      it.color = colorOf(p);
+      const sz = sizesOf(p); it.size = sz.length===1 ? sz[0] : (sz.includes(it.size) ? it.size : '');
+      it.cat = guessCat(p);
+      it.autoPrice = true;
+    }
+    if (it.autoPrice || !it.price){ const fp = fetchedPrice(it); if (fp!=null){ it.price = String(fp); it.autoPrice = true; } }
+  }
+  paintItem(i); update();
+}
+
+function itemHTML(it,i){
+  const h = handleOf(it.link), p = h && P[h];
+  let pv = '';
+  if (it.link && !h) pv = `<p class="pv-msg">這好像不是 ALO 官網的商品連結喔，請貼 aloyoga.com 的商品頁 🩵</p>`;
+  else if (p && p.loading) pv = `<p class="pv-msg">正在讀取官網資料…</p>`;
+  else if (p && p.err) pv = `<p class="pv-msg">讀不到這個商品的資料，請自己填顏色、尺寸和官網原價喔 🤍</p>`;
+  else if (p){
+    const price = priceOf(it);
+    pv = `<div class="pv">${p.image?.src?`<img src="${esc(p.image.src)}&width=160" alt="" width="64" height="64">`:''}
+      <div class="pv-t"><b>${esc(p.title)}</b><span>${price!=null?`官網價 ${aud(price)}　→ 打 ${zhe()} 折後 ${aud(price*(1-CONFIG.discount))}`:'請在下面填官網原價'}</span></div></div>`;
+  }
+  const ok = p && !p.err && !p.loading, sz = ok ? sizesOf(p) : [];
+  const sizeField = (ok && sz.length)
+    ? `<select id="size-${i}" data-f="size"><option value="">請選尺寸</option>${sz.map(s=>`<option${s===it.size?' selected':''}>${esc(s)}</option>`).join('')}</select>`
+    : `<input id="size-${i}" data-f="size" type="text" placeholder="照官網填，例：S、W6" value="${esc(it.size)}">`;
+  return `<div class="item" data-i="${i}">
+      <div class="item-top"><span class="idx">${String(i+1).padStart(2,'0')}</span>
         <button class="del" type="button" data-del="${i}" aria-label="刪除第 ${i+1} 件">刪除</button></div>
-      <label>商品連結<input id="link-${i}" data-f="link" type="url" inputmode="url" placeholder="貼上 aloyoga.com 商品連結" value="${esc(it.link)}"></label>
+      <label>商品連結<input id="link-${i}" data-f="link" type="url" inputmode="url" placeholder="貼上 ALO 澳洲官網的商品連結" value="${esc(it.link)}"></label>
+      <div class="pvwrap">${pv}</div>
       <div class="fields">
-        <label>顏色<input id="color-${i}" data-f="color" type="text" placeholder="例：Black" value="${esc(it.color)}"></label>
-        <label>尺寸<input id="size-${i}" data-f="size" type="text" placeholder="照官網填，例：S、W6" value="${esc(it.size)}"></label>
+        <label>顏色<input id="color-${i}" data-f="color" type="text" placeholder="例：Black" value="${esc(it.color)}"${ok?' readonly':''}></label>
+        <label>尺寸${sizeField}</label>
+        <label>官網原價 A$<input id="price-${i}" data-f="price" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：178" value="${esc(it.price)}"></label>
         <label>數量<input id="qty-${i}" data-f="qty" type="number" inputmode="numeric" min="1" step="1" value="${it.qty ?? 1}"></label>
         <label class="span2">類別<select id="cat-${i}" data-f="cat">${catOptions(it.cat)}</select></label>
       </div>
-    </div>`).join('');
+      ${ok?'<p class="note">想要別的顏色嗎？請貼那個顏色的商品連結喔～</p>':''}
+    </div>`;
+}
+function renderItems(){ $('items').innerHTML = state.items.map(itemHTML).join(''); }
+function paintItem(i){
+  const old = document.querySelector(`.item[data-i="${i}"]`); if (!old || !old.isConnected) return;
+  const focusId = document.activeElement?.id; let pos = null; try{ pos = document.activeElement?.selectionStart; }catch(e){}
+  const tmp = document.createElement('div'); tmp.innerHTML = itemHTML(state.items[i], i).trim();
+  try{ old.replaceWith(tmp.firstElementChild); }catch(e){ renderItems(); }
+  if (focusId && $(focusId)) { $(focusId).focus(); try{ if (pos!=null) $(focusId).setSelectionRange(pos,pos); }catch(e){} }
 }
 
 function calc(){
-  let main=0, all=0, shipItems=0;
+  let main=0, all=0, shipItems=0, origAUD=0, missing=0;
   for (const it of state.items){
     const q = Math.max(0, parseInt(it.qty)||0);
     if (!String(it.link||'').trim() || !q) continue;
     const c = CATS.find(x=>x.id===it.cat) || CATS[0];
     all += q; if (c.counts) main += q;
     shipItems += c.ship*q;
+    const pr = priceOf(it); if (pr==null) missing++; else origAUD += pr*q;
   }
   const fee = main >= CONFIG.largeFrom ? CONFIG.feeLarge : CONFIG.feeSmall;
+  const goodsNT = Math.ceil(origAUD*(1-CONFIG.discount)*CONFIG.rate);
+  const feeNT = Math.ceil(goodsNT*fee);
   const direct = state.ship==='direct' && all >= CONFIG.directMin;
   const shipNT = all===0 ? 0 : (direct ? null : CONFIG.storeFee + shipItems);
-  return {fee, main, all, acc: all-main, direct, shipNT};
+  return {fee, main, all, acc: all-main, direct, shipNT, origAUD, goodsNT, feeNT, missing, total: goodsNT+feeNT+(shipNT||0)};
 }
 
 function update(){
@@ -276,54 +355,60 @@ function update(){
   $('recvNote').textContent = state.ship==='direct' ? '直寄到府：送出訂單後，再私訊我們收件地址就可以囉～運費會依物流報價另計 🤍' : '不知道店號嗎？可以到 7-11 電子地圖（emap.pcsc.com.tw）查詢，店號是 6 位數字喔！';
   $('directHint').textContent = canDirect ? '運費依物流實際報價另計，需要先付清商品全款喔～' : `滿 ${CONFIG.directMin} 件（含小配件）就可以選喔！目前 ${r.all} 件`;
 
-  const shipLabel = r.direct ? '待物流報價' : nt(r.shipNT||0);
+  const partial = r.missing ? `（另有 ${r.missing} 件待確認）` : '';
   $('lines').innerHTML = `
     <div class="line"><span>件數</span><span>${r.main} 件＋配件 ${r.acc}</span></div>
-    <div class="line"><span>買手費</span><span>${pct(r.fee)}</span></div>
-    <div class="line"><span>${r.direct?'直寄運費':'集運＋7-11 運費'}</span><span>${shipLabel}</span></div>
-    <div class="line"><span>商品＋買手費</span><span>確認價格後通知</span></div>`;
-  $('total').textContent = r.direct ? '待確認' : '待確認 + ' + nt(r.shipNT||0);
-  $('formula').textContent = `總價 ＝ 官網價 × ${Math.round((1-CONFIG.discount)*100)/10} 折 × 匯率 ${CONFIG.rate} × (1＋${pct(r.fee)}) ${r.direct?'＋ 直寄運費（另計）':'＋ 運費 '+nt(r.shipNT||0)}`;
+    <div class="line"><span>商品（官網價 ${aud(r.origAUD)} × ${zhe()} 折 × ${CONFIG.rate}）</span><span>${nt(r.goodsNT)}</span></div>
+    <div class="line"><span>買手費 ${pct(r.fee)}</span><span>${nt(r.feeNT)}</span></div>
+    <div class="line"><span>${r.direct?'直寄運費':'集運＋7-11 運費'}</span><span>${r.direct?'待物流報價':nt(r.shipNT||0)}</span></div>`;
+  $('total').textContent = nt(r.total) + (r.direct?' + 運費':'');
+  $('formula').textContent = r.missing ? `還有 ${r.missing} 件商品沒填官網原價喔，填好總價就會更新 🤍` : '價格依官網原價試算，實際以結帳金額為準喔～';
   const msgs = [];
   if (r.direct) msgs.push('直寄小提醒：需要先付清商品全款，運費會在寄出當天依物流報價通知你，付款後就幫你寄出 🤍 收件人也要先完成 EZ WAY 實名認證喔！');
-  if (r.main>0 && r.main<CONFIG.largeFrom) msgs.push(`衣服／褲／鞋再買 ${CONFIG.largeFrom-r.main} 件，買手費就降到 ${pct(CONFIG.feeLarge)} 喔 🩵`);
-  if (state.items.some(i=>i.ex)) msgs.push('現在顯示的是範例喔～改成你想買的商品，或按「清空重填」就可以開始囉！');
+  if (r.main>0 && r.main<CONFIG.largeFrom && CONFIG.largeFrom-r.main<=4) msgs.push(`衣服／褲／鞋再買 ${CONFIG.largeFrom-r.main} 件，買手費就降到 ${pct(CONFIG.feeLarge)} 喔 🩵`);
   $('alert').hidden = !msgs.length; $('alert').innerHTML = msgs.map(esc).join('<br>');
   save();
 }
 
-function copyText(){
+function itemLine(it,i){
+  const c = CATS.find(x=>x.id===it.cat)||CATS[0], p = P[handleOf(it.link)], pr = priceOf(it);
+  const name = p && p.title ? p.title : it.link;
+  return `${i+1}. ${name}\n   ${it.color||'?'}／${it.size||'?'} × ${it.qty}｜${c.name}｜${pr==null?'價格待確認':'官網 '+aud(pr)}\n   ${it.link}`;
+}
+function copyText(id){
   const r = calc();
-  const L = ['【ALO 代購】' + (state.who||'')];
-  if (arguments[0]) L.unshift('訂單編號 ' + arguments[0]);
-  state.items.forEach((it,i)=>{
-    if (!String(it.link||'').trim()) return;
-    const c = CATS.find(x=>x.id===it.cat)||CATS[0];
-    L.push(`${i+1}. ${it.link}\n   ${it.color||'?'}／${it.size||'?'} × ${it.qty}｜${c.name}`);
-  });
+  const L = [];
+  if (id) L.push('訂單編號 ' + id);
+  L.push('【ALO 代購】' + (state.who||''));
+  state.items.forEach((it,i)=>{ if (String(it.link||'').trim()) L.push(itemLine(it,i)); });
   L.push('', `衣服／褲／鞋 ${r.main} 件，小配件 ${r.acc} 件`,
-    `買手費 ${pct(r.fee)}`,
+    `商品 ${nt(r.goodsNT)}（官網價 ${aud(r.origAUD)} × ${zhe()} 折 × ${CONFIG.rate}）`,
+    `買手費 ${pct(r.fee)} ${nt(r.feeNT)}`,
     r.direct ? '運費：直寄，待物流報價' : `集運＋7-11 運費 ${nt(r.shipNT||0)}`,
-    '商品＋買手費：確認官網價格後通知');
+    `試算總價 ${nt(r.total)}${r.direct?' + 運費':''}${r.missing?`（另有 ${r.missing} 件待確認）`:''}`);
   const R = state.recv||{};
   if (R.name) L.push('', `收件人 ${R.name}｜${R.phone||''}`, r.direct ? '直寄：地址另外私訊' : `7-11 ${R.store||''}（店號 ${R.storeId||''}）`);
   return L.join('\n');
 }
 
+let linkTimer;
 $('items').addEventListener('input', e=>{
   const box = e.target.closest('.item'); if (!box) return;
-  const it = state.items[+box.dataset.i]; it[e.target.dataset.f] = e.target.value;
-  if (it.ex){ it.ex=false; box.classList.remove('example'); box.querySelector('.tag')?.remove(); }
+  const i = +box.dataset.i, it = state.items[i], f = e.target.dataset.f;
+  it[f] = e.target.value;
+  if (f==='link'){ clearTimeout(linkTimer); linkTimer = setTimeout(()=>loadProduct(i), 500); }
+  if (f==='price'){ it.autoPrice = false; }
   update();
 });
+$('items').addEventListener('change', e=>{ const f=e.target.dataset.f; if (f==='size' || f==='cat'){ const i=+e.target.closest('.item').dataset.i, it=state.items[i]; it[f]=e.target.value; if (f==='size' && it.autoPrice){ const fp=fetchedPrice(it); if (fp!=null) it.price=String(fp); } paintItem(i); update(); } });
 $('items').addEventListener('click', e=>{
   const d = e.target.closest('[data-del]'); if (!d) return;
   state.items.splice(+d.dataset.del,1);
-  if (!state.items.length) state.items.push({link:'',color:'',size:'',qty:1,cat:'light'});
+  if (!state.items.length) state.items.push(blank());
   renderItems(); update();
 });
-$('addBtn').onclick = ()=>{ state.items.push({link:'',color:'',size:'',qty:1,cat:'light'}); renderItems(); update(); $('link-'+(state.items.length-1)).focus(); };
-$('clearBtn').onclick = ()=>{ state.items=[{link:'',color:'',size:'',qty:1,cat:'light'}]; state.ship='pool'; renderItems(); update(); };
+$('addBtn').onclick = ()=>{ state.items.push(blank()); renderItems(); update(); $('link-'+(state.items.length-1)).focus(); };
+$('clearBtn').onclick = ()=>{ state.items=[blank()]; state.ship='pool'; renderItems(); update(); };
 $('who').value = state.who||''; $('who').oninput = e=>{ state.who=e.target.value; save(); };
 document.querySelectorAll('input[name=ship]').forEach(r=>r.onchange=e=>{ state.ship=e.target.value; update(); });
 $('copyBtn').onclick = ()=>{
@@ -344,10 +429,11 @@ function makeId(){
 }
 function validate(r){
   const R=state.recv;
-  if (state.items.some(i=>i.ex)) return '請先把範例換成你想買的商品，或按「清空重填」喔～';
   if (r.all===0) return '還沒有商品喔～請至少貼上一件商品的連結 🩵';
   const bad = state.items.findIndex(i=>String(i.link||'').trim() && (!String(i.color||'').trim() || !String(i.size||'').trim()));
-  if (bad>=0) return `第 ${bad+1} 件商品還沒填顏色或尺寸喔～`;
+  if (bad>=0) return `第 ${bad+1} 件商品還沒選顏色或尺寸喔～`;
+  const np = state.items.findIndex(i=>String(i.link||'').trim() && priceOf(i)==null);
+  if (np>=0) return `第 ${np+1} 件商品還沒填官網原價喔～照官網上的澳幣價格填就可以了 🩵`;
   if (!R.name) return '請幫我們填一下收件人姓名喔～';
   if (!/^09\d{8}$/.test((R.phone||'').replace(/[\s-]/g,''))) return '手機格式好像不太對，請填 09 開頭的 10 位數字喔～';
   if (state.ship==='pool' && !R.store) return '請幫我們填一下 7-11 門市名稱喔～';
@@ -358,11 +444,12 @@ $('submitBtn').onclick = async ()=>{
   const r = calc(), msg = validate(r); $('formErr').textContent = msg; if (msg) return;
   if (!CONFIG.orderUrl){ $('formErr').textContent='線上下單還沒開放喔～請先按「複製明細」私訊 LINE 官方帳號 🩵'; return; }
   const id = makeId(), R = state.recv, btn = $('submitBtn');
-  const itemsText = state.items.filter(i=>String(i.link||'').trim()).map((it,i)=>{const c=CATS.find(x=>x.id===it.cat)||CATS[0];return `${i+1}. ${it.color}／${it.size} ×${it.qty}｜${c.name}\n${it.link}`;}).join('\n');
+  const itemsText = state.items.filter(i=>String(i.link||'').trim()).map(itemLine).join('\n')
+    + `\n——\n官網原價合計 ${r.missing?'（有 '+r.missing+' 件待確認）':aud(r.origAUD)}｜試算總價 ${nt(r.total)}${r.direct?' + 運費':''}`;
   const payload = {orderId:id, who:state.who||'', name:R.name, phone:R.phone.replace(/[\s-]/g,''),
     ship: r.direct?'直寄（地址私訊）':'集運＋7-11', store: r.direct?'':R.store, storeId: r.direct?'':R.storeId,
     items: itemsText, main:r.main, acc:r.acc, discount:+(1-CONFIG.discount).toFixed(2), rate:CONFIG.rate, feeRate:r.fee,
-    shipping: r.direct?'待物流報價':r.shipNT};
+    shipping: r.direct?'待物流報價':r.shipNT, priceSum: r.missing ? '' : Math.round(r.origAUD*100)/100};
   btn.disabled=true; btn.textContent='送出中…';
   try{
     await fetch(CONFIG.orderUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
@@ -370,27 +457,27 @@ $('submitBtn').onclick = async ()=>{
   }catch(e){ $('formErr').textContent='送出失敗了，請檢查網路後再試一次，或按「複製明細」私訊 LINE 官方帳號給我們 🤍'; }
   btn.disabled=false; btn.textContent='② 送出訂單';
 };
-$('doneClose').onclick = ()=>{ $('doneWrap').hidden=true; state.items=[{link:'',color:'',size:'',qty:1,cat:'light'}]; state.ship='pool'; renderItems(); update(); };
+$('doneClose').onclick = ()=>{ $('doneWrap').hidden=true; state.items=[blank()]; state.ship='pool'; renderItems(); update(); };
 
 // static sections
 $('terms').innerHTML = [
-  `本次折扣 <b>${Math.round((1-CONFIG.discount)*100)/10} 折</b>`,
+  `本次折扣 <b>${zhe()} 折</b>`,
   `匯率 <b>${CONFIG.rate}</b>`,
-  `買手費 1–2 件 <b>${pct(CONFIG.feeSmall)}</b>`,
-  `3 件以上 <b>${pct(CONFIG.feeLarge)}</b>`
+  `買手費 <b>${pct(CONFIG.feeSmall)}</b>`,
+  `衣褲鞋滿 ${CONFIG.largeFrom} 件 <b>${pct(CONFIG.feeLarge)}</b>`
 ].map(s=>`<span class="chip">${s}</span>`).join('');
 $('rulesList').innerHTML = [
-  `買手費依「衣服、褲子、鞋子」的件數計算：1–2 件 ${pct(CONFIG.feeSmall)}，3 件以上 ${pct(CONFIG.feeLarge)}。襪子、帽子、髮圈、吊飾這些小配件不算件數；只買小配件的話是 ${pct(CONFIG.feeSmall)} 喔。`,
+  `買手費 ${pct(CONFIG.feeSmall)}；衣服、褲子、鞋子買滿 ${CONFIG.largeFrom} 件，買手費降到 ${pct(CONFIG.feeLarge)} 🩵 襪子、帽子、髮圈、吊飾這些小配件不算件數喔。`,
   '我們會先統一集運回台灣，再用 7-11 店到店寄給你 🤍 運費照下面的表固定計算，一開始就看得到。',
   '集運要等全部商品到齊才會一起寄出，時間會比直寄久一點，沒辦法個別提早寄，再請多多包涵～',
   `買滿 ${CONFIG.directMin} 件（含小配件）就可以選直寄到府：需要先付清商品全款，運費在寄出當天依物流報價通知，付款後就幫你寄出。收件人要先完成 EZ WAY 實名認證喔！`,
-  '顏色和尺寸請一定要自己填，而且要跟澳洲官網的選項一模一樣（例如鞋子請填官網的 W 尺寸）。官網連結常常預設成別的選項，我們一律以你填的為準 🩵',
+  '貼上連結後，顏色會照連結的商品自動帶入；想要別的顏色，請貼那個顏色的連結。尺寸請從選單選，要跟澳洲官網一模一樣（例如鞋子是 W 尺寸）🩵',
+  '官網原價請填澳洲官網上的澳幣價格（打折前的價格），我們會用它試算總價；特價品或活動折扣以實際結帳金額為準，有差額會再告訴你。',
   '下單流程：先按「複製明細」保存 → 送出訂單 → 截圖私訊 LINE 官方帳號跟我們核對商品。核對沒問題後，會告訴你總價和轉帳資訊，收到款項就馬上幫你下單 🤎'
 ].map(s=>`<li>${esc(s)}</li>`).join('');
 $('shipTable').innerHTML = `<tr><td>7-11 店到店（每單）</td><td>${nt(CONFIG.storeFee)}</td></tr>` +
   CATS.map(c=>`<tr><td>${c.name}${c.hint?' <small>· '+c.hint+'</small>':''}</td><td>${nt(c.ship)} / ${c.id.includes('shoe')?'雙':'件'}</td></tr>`).join('');
 
 renderItems(); update();
+state.items.forEach((it,i)=>{ if (handleOf(it.link)) { it.h=null; loadProduct(i); } });
 </script>
-
-</body></html>
