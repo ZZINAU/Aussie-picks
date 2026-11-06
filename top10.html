@@ -215,17 +215,4 @@ h1 .en{font-family:var(--f-en);letter-spacing:.06em}
     <small>點商品卡片可以直接看 ALO 澳洲官網　IG：@zz.in.au</small>
   </div>
 </div>
-<div class="tools"><button id="dl" type="button">下載成圖片</button><p id="msg"></p></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script>
-document.getElementById('dl').onclick=async()=>{
-  const m=document.getElementById('msg'); m.textContent='製作圖片中…';
-  try{
-    await document.fonts.ready;
-    const c=await html2canvas(document.getElementById('poster'),{scale:3,useCORS:true,backgroundColor:'#FFF7EC'});
-    const a=document.createElement('a'); a.download='ALO台灣熱賣Top10.png'; a.href=c.toDataURL('image/png'); a.click();
-    m.textContent='已下載 🩵';
-  }catch(e){ m.textContent='下載失敗，請直接用手機截圖喔'; }
-};
-</script>
 </body></html>
