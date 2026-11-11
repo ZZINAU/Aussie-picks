@@ -147,7 +147,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
     <div class="brand">ALO · Australia → Taiwan</div>
     <h1><span class="en">ALO</span> 代購下單</h1>
     <div class="terms" id="terms"></div>
-    <p class="note">嗨～歡迎來到 zzinau 的 ALO 代購 🩵 貼上 ALO 澳洲官網的商品連結，確認官網原價、選好尺寸和數量，總價就會自動算出來囉！</p>
+    <p class="note">嗨～歡迎來到 zzinau 的 ALO 代購 🩵 貼上 ALO 澳洲官網的商品連結，確認官網售價、選好尺寸和數量，總價就會自動算出來囉！</p>
   </header>
 
   <div class="grid">
@@ -161,7 +161,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
           <input id="who" type="text" placeholder="例：王小美 @xiaomei" autocomplete="off">
         </label>
         <a class="alolink" href="https://www.aloyoga.com/en-au" target="_blank" rel="noopener">🔗 打開 ALO 澳洲官網挑商品 <span>aloyoga.com/en-au ↗</span></a>
-        <p class="warnbox">🩵 貼上 ALO 澳洲官網的商品連結，<b>價格、顏色、尺寸選項</b>會自動帶入～沒有帶入的話，請照官網的<b>澳幣原價</b>自己填喔！<br>🩵 尺寸請從選單選，我們一律以你在這裡選的為準，送出前麻煩再核對一次 🤍</p>
+        <p class="warnbox">🩵 貼上 ALO 澳洲官網的商品連結，<b>價格、顏色、尺寸選項</b>會自動帶入～沒有帶入的話，請照官網上<b>現在顯示的澳幣售價</b>自己填（有特價就填特價後的價格）喔！<br>🩵 尺寸請從選單選，我們一律以你在這裡選的為準，送出前麻煩再核對一次 🤍</p>
         <div class="stack" id="items"></div>
         <button class="add" id="addBtn" type="button">＋ 新增一件商品</button>
       </section>
@@ -230,7 +230,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
 <script>
 /* ===== Karoline 每次活動只要改這裡 ===== */
 const CONFIG = {
-  discount: 0.30,        // 本次活動折扣（0.30 = 打七折）
+  discount: 0,           // 額外折扣：官網已經顯示特價時一律填 0（價格直接用官網現在的售價）
   rate: 23,              // 匯率 A$1 = NT$
   feeSmall: 0.13,        // 衣服/褲/鞋 1–9 件
   feeLarge: 0.10,        // 衣服/褲/鞋 10 件以上
@@ -253,7 +253,7 @@ const pct = n => Math.round(n*100) + '%';
 const nt = n => 'NT$' + Math.round(n).toLocaleString('en-US');
 const aud = n => 'A$' + (Math.round(n*100)/100).toLocaleString('en-US');
 const zhe = () => Math.round((1-CONFIG.discount)*100)/10;
-const KEY = 'alo-order-v5';
+const KEY = 'alo-order-v6';
 const blank = () => ({link:'',color:'',size:'',qty:1,cat:'light',price:''});
 
 let state = {who:'', ship:'pool', items:[blank()]};
@@ -317,11 +317,11 @@ function itemHTML(it,i){
   let pv = '';
   if (it.link && !h) pv = `<p class="pv-msg">這好像不是 ALO 官網的商品連結喔，請貼 aloyoga.com 的商品頁 🩵</p>`;
   else if (p && p.loading) pv = `<p class="pv-msg">正在讀取官網資料…</p>`;
-  else if (p && p.err) pv = `<p class="pv-msg">讀不到這個商品的資料，請自己填顏色、尺寸和官網原價喔 🤍</p>`;
+  else if (p && p.err) pv = `<p class="pv-msg">讀不到這個商品的資料，請自己填顏色、尺寸和官網售價喔 🤍</p>`;
   else if (p){
     const price = priceOf(it);
     pv = `<div class="pv">${p.image?.src?`<img src="${esc(p.image.src)}&width=160" alt="" width="64" height="64">`:''}
-      <div class="pv-t"><b>${esc(p.title)}</b><span>${price!=null?`官網價 ${aud(price)}　→ 打 ${zhe()} 折後 ${aud(price*(1-CONFIG.discount))}`:'請在下面填官網原價'}</span></div></div>`;
+      <div class="pv-t"><b>${esc(p.title)}</b><span>${price!=null?`官網售價 ${aud(price)}${(()=>{const v=p.variants[0];const c=parseFloat(v&&v.compare_at_price);return c>price?`（原價 ${aud(c)}，已是特價）`:''})()}`:'請在下面填官網售價'}</span></div></div>`;
   }
   const ok = p && !p.err && !p.loading, sz = ok ? sizesOf(p) : [];
   const sizeField = (ok && sz.length)
@@ -335,7 +335,7 @@ function itemHTML(it,i){
       <div class="fields">
         <label>顏色<input id="color-${i}" data-f="color" type="text" placeholder="例：Black" value="${esc(it.color)}"${ok?' readonly':''}></label>
         <label>尺寸${sizeField}</label>
-        <label>官網原價 A$<input id="price-${i}" data-f="price" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：178" value="${esc(it.price)}"></label>
+        <label>官網售價 A$<input id="price-${i}" data-f="price" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：178" value="${esc(it.price)}"></label>
         <label>數量<input id="qty-${i}" data-f="qty" type="number" inputmode="numeric" min="1" step="1" value="${it.qty ?? 1}"></label>
         <label class="span2">類別<select id="cat-${i}" data-f="cat">${catOptions(it.cat)}</select></label>
       </div>
@@ -384,12 +384,12 @@ function update(){
   const partial = r.missing ? `（另有 ${r.missing} 件待確認）` : '';
   $('lines').innerHTML = `
     <div class="line"><span>件數</span><span>${r.main} 件＋配件 ${r.acc}</span></div>
-    <div class="line"><span>商品（官網價 ${aud(r.origAUD)} × ${zhe()} 折 × ${CONFIG.rate}）</span><span>${nt(r.goodsNT)}</span></div>
+    <div class="line"><span>商品（官網售價 ${aud(r.origAUD)}${CONFIG.discount?` × ${zhe()} 折`:''} × ${CONFIG.rate}）</span><span>${nt(r.goodsNT)}</span></div>
     <div class="line"><span>買手費 ${pct(r.fee)}</span><span>${nt(r.feeNT)}</span></div>
     <div class="line"><span>${r.direct?'直寄運費':'集運＋7-11 運費'}</span><span>${r.direct?'待物流報價':nt(r.shipNT||0)}</span></div>`;
   $('total').textContent = nt(r.total) + (r.direct?' + 運費':'');
   if ($('mtotal')) $('mtotal').textContent = $('total').textContent;
-  $('formula').textContent = r.missing ? `還有 ${r.missing} 件商品沒填官網原價喔，填好總價就會更新 🤍` : '價格依官網原價試算，實際以結帳金額為準喔～';
+  $('formula').textContent = r.missing ? `還有 ${r.missing} 件商品沒填官網售價喔，填好總價就會更新 🤍` : '價格依官網售價試算，實際以結帳金額為準喔～';
   const msgs = [];
   if (r.direct) msgs.push('直寄小提醒：需要先付清商品全款，運費會在寄出當天依物流報價通知你，付款後就幫你寄出 🤍 收件人也要先完成 EZ WAY 實名認證喔！');
   if (r.main>0 && r.main<CONFIG.largeFrom && CONFIG.largeFrom-r.main<=4) msgs.push(`衣服／褲／鞋再買 ${CONFIG.largeFrom-r.main} 件，買手費就降到 ${pct(CONFIG.feeLarge)} 喔 🩵`);
@@ -409,7 +409,7 @@ function copyText(id){
   L.push('【ALO 代購】' + (state.who||''));
   state.items.forEach((it,i)=>{ if (String(it.link||'').trim()) L.push(itemLine(it,i)); });
   L.push('', `衣服／褲／鞋 ${r.main} 件，小配件 ${r.acc} 件`,
-    `商品 ${nt(r.goodsNT)}（官網價 ${aud(r.origAUD)} × ${zhe()} 折 × ${CONFIG.rate}）`,
+    `商品 ${nt(r.goodsNT)}（官網售價 ${aud(r.origAUD)}${CONFIG.discount?` × ${zhe()} 折`:''} × ${CONFIG.rate}）`,
     `買手費 ${pct(r.fee)} ${nt(r.feeNT)}`,
     r.direct ? '運費：直寄，待物流報價' : `集運＋7-11 運費 ${nt(r.shipNT||0)}`,
     `試算總價 ${nt(r.total)}${r.direct?' + 運費':''}${r.missing?`（另有 ${r.missing} 件待確認）`:''}`);
@@ -460,7 +460,7 @@ function validate(r){
   const bad = state.items.findIndex(i=>String(i.link||'').trim() && (!String(i.color||'').trim() || !String(i.size||'').trim()));
   if (bad>=0) return `第 ${bad+1} 件商品還沒選顏色或尺寸喔～`;
   const np = state.items.findIndex(i=>String(i.link||'').trim() && priceOf(i)==null);
-  if (np>=0) return `第 ${np+1} 件商品還沒填官網原價喔～照官網上的澳幣價格填就可以了 🩵`;
+  if (np>=0) return `第 ${np+1} 件商品還沒填官網售價喔～照官網上現在顯示的澳幣價格填就可以了 🩵`;
   if (!R.name) return '請幫我們填一下收件人姓名喔～';
   if (!/^09\d{8}$/.test((R.phone||'').replace(/[\s-]/g,''))) return '手機格式好像不太對，請填 09 開頭的 10 位數字喔～';
   if (state.ship==='pool' && !R.store) return '請幫我們填一下 7-11 門市名稱喔～';
@@ -472,7 +472,7 @@ $('submitBtn').onclick = async ()=>{
   if (!CONFIG.orderUrl){ $('formErr').textContent='線上下單還沒開放喔～請先按「複製明細」私訊 LINE 官方帳號 🩵'; return; }
   const id = makeId(), R = state.recv, btn = $('submitBtn');
   const itemsText = state.items.filter(i=>String(i.link||'').trim()).map(itemLine).join('\n')
-    + `\n——\n官網原價合計 ${r.missing?'（有 '+r.missing+' 件待確認）':aud(r.origAUD)}｜試算總價 ${nt(r.total)}${r.direct?' + 運費':''}`;
+    + `\n——\n官網售價合計 ${r.missing?'（有 '+r.missing+' 件待確認）':aud(r.origAUD)}｜試算總價 ${nt(r.total)}${r.direct?' + 運費':''}`;
   const payload = {orderId:id, who:state.who||'', name:R.name, phone:R.phone.replace(/[\s-]/g,''),
     ship: r.direct?'直寄（地址私訊）':'集運＋7-11', store: r.direct?'':R.store, storeId: r.direct?'':R.storeId,
     items: itemsText, main:r.main, acc:r.acc, discount:+(1-CONFIG.discount).toFixed(2), rate:CONFIG.rate, feeRate:r.fee,
@@ -488,7 +488,7 @@ $('doneClose').onclick = ()=>{ $('doneWrap').hidden=true; state.items=[blank()];
 
 // static sections
 $('terms').innerHTML = [
-  `本次折扣 <b>${zhe()} 折</b>`,
+  CONFIG.discount ? `本次折扣 <b>${zhe()} 折</b>` : `價格 <b>照官網特價</b>`,
   `匯率 <b>${CONFIG.rate}</b>`,
   `買手費 <b>${pct(CONFIG.feeSmall)}</b>`,
   `衣褲鞋滿 ${CONFIG.largeFrom} 件 <b>${pct(CONFIG.feeLarge)}</b>`
@@ -499,7 +499,7 @@ $('rulesList').innerHTML = [
   '集運要等全部商品到齊才會一起寄出，時間會比直寄久一點，沒辦法個別提早寄，再請多多包涵～',
   `買滿 ${CONFIG.directMin} 件（含小配件）就可以選直寄到府：需要先付清商品全款，運費在寄出當天依物流報價通知，付款後就幫你寄出。收件人要先完成 EZ WAY 實名認證喔！`,
   '貼上連結後，顏色會照連結的商品自動帶入；想要別的顏色，請貼那個顏色的連結。尺寸請從選單選，要跟澳洲官網一模一樣（例如鞋子是 W 尺寸）🩵',
-  '官網原價請填澳洲官網上的澳幣價格（打折前的價格），我們會用它試算總價；特價品或活動折扣以實際結帳金額為準，有差額會再告訴你。',
+  '官網售價請填澳洲官網上「現在顯示」的澳幣價格，有特價就直接填特價後的價格，不用自己再打折喔！實際金額以結帳為準，有差額會再告訴你。',
   '下單流程：先按「複製明細」保存 → 送出訂單 → 截圖私訊 LINE 官方帳號跟我們核對商品。核對沒問題後，會告訴你總價和轉帳資訊，收到款項就馬上幫你下單 🤎'
 ].map(s=>`<li>${esc(s)}</li>`).join('');
 $('shipTable').innerHTML = `<tr><td>7-11 店到店（每單）</td><td>${nt(CONFIG.storeFee)}</td></tr>` +
