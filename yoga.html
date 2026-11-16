@@ -184,7 +184,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
         <h2>寄送方式</h2>
         <div class="opts" id="opts">
           <label class="opt" id="optPool"><input type="radio" name="ship" id="shipPool" value="pool" checked>
-            <div><strong>集運回台 + 7-11 店到店</strong><small>運費固定，已含在總價裡。全部商品到齊後一起寄回台灣。</small></div></label>
+            <div><strong>集運回台 + 7-11 店到店</strong><small>運費固定，已含在總價裡。全部商品到齊後一起寄回台灣，<b>約 3–4 週</b>到貨（不含品牌官方出貨的工作天）。</small></div></label>
           <label class="opt" id="optDirect"><input type="radio" name="ship" id="shipDirect" value="direct">
             <div><strong>直寄到府</strong><small id="directHint">商品金額滿 NT$10,000 才能選。</small></div></label>
         </div>
@@ -335,7 +335,7 @@ function update(){
   $('optPool').classList.toggle('on', state.ship==='pool'); $('optDirect').classList.toggle('on', state.ship==='direct');
   ['lStore','lStoreId'].forEach(id=>$(id).hidden = state.ship==='direct');
   $('recvNote').textContent = state.ship==='direct' ? '直寄到府：送出訂單後，再私訊我們收件地址就可以囉～運費會依物流報價另計 🤍' : '不知道店號嗎？可以到 7-11 電子地圖（emap.pcsc.com.tw）查詢，店號是 6 位數字喔！';
-  $('directHint').textContent = canDirect ? '運費依物流實際報價另計，需要先付清商品全款喔～' : `商品金額滿 ${nt(CONFIG.directMin)} 就可以選喔！目前 ${nt(r.goodsNT)}`;
+  $('directHint').textContent = canDirect ? '約 1–2 週到貨（不含品牌官方出貨的工作天）。運費依物流實際報價另計，需要先付清商品全款喔～' : `商品金額滿 ${nt(CONFIG.directMin)} 就可以選喔！目前 ${nt(r.goodsNT)}`;
 
   $('lines').innerHTML = `
     <div class="line"><span>件數</span><span>${r.main} 件＋配件 ${r.acc}</span></div>
@@ -452,7 +452,7 @@ $('rulesList').innerHTML = [
   'SKIMS、lululemon、CSB 三個品牌可以一起下單、金額一起計算～',
   '官網售價請填澳洲官網上顯示的澳幣價格（有特價就填特價後的價格）。lululemon 的特價區叫「We Made Too Much」，不是 Sale 喔！',
   '我們會先統一集運回台灣，再用 7-11 店到店寄給你 🤍 運費照下面的表固定計算，一開始就看得到。',
-  '集運要等全部商品到齊才會一起寄出，時間會比直寄久一點，沒辦法個別提早寄，再請多多包涵～',
+  '⏰ 等待時間（都不含品牌官方出貨的工作天）：集運回台約 3–4 週；直寄到府約 1–2 週。集運要等全部商品到齊才會一起寄出，沒辦法個別提早寄，再請多多包涵～',
   `商品金額滿 ${nt(CONFIG.directMin)} 就可以選直寄到府：需要先付清商品全款，運費在寄出當天依物流報價通知，付款後就幫你寄出。收件人要先完成 EZ WAY 實名認證喔！`,
   '顏色和尺寸請照澳洲官網上的寫法填，我們一律以你在下單網頁上填的為準 🩵',
   '下單流程：先按「複製明細」保存 → 送出訂單 → 截圖私訊 LINE 官方帳號跟我們核對商品。核對沒問題後，會告訴你總價和轉帳資訊，收到款項就馬上幫你下單 🤎'
