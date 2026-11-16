@@ -88,6 +88,7 @@ button{font:inherit;cursor:pointer;border-radius:8px}
 .recv{display:grid;grid-template-columns:1fr;gap:10px}
 @media (min-width:560px){.recv{grid-template-columns:1fr 1fr}}
 .req{color:var(--maroon)}
+.recv .span-all{grid-column:1/-1}
 .pv{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px}
 .pv img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--soft)}
 .pv-t{display:grid;gap:2px;min-width:0;font-size:13.5px}
@@ -194,6 +195,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
         <div class="recv">
           <label>收件人姓名 <span class="req">*</span><input id="rName" type="text" autocomplete="name" placeholder="與證件相同的真實姓名"></label>
           <label>手機 <span class="req">*</span><input id="rPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912345678"></label>
+          <label class="span-all">Email <span class="req">*</span><input id="rEmail" type="email" inputmode="email" autocomplete="email" placeholder="出貨通知會寄到這個信箱喔"></label>
           <label id="lStore">7-11 門市名稱 <span class="req">*</span><input id="rStore" type="text" placeholder="例：南京門市"></label>
           <label id="lStoreId">7-11 店號 <span class="req">*</span><input id="rStoreId" type="text" inputmode="numeric" maxlength="6" placeholder="6 位數字"></label>
         </div>
@@ -365,7 +367,7 @@ function copyText(id){
     r.direct ? '運費：直寄，待物流報價' : `集運＋7-11 運費 ${nt(r.shipNT||0)}`,
     `試算總價 ${nt(r.total)}${r.direct?' + 運費':''}${r.missing?`（另有 ${r.missing} 件待確認）`:''}`);
   const R = state.recv||{};
-  if (R.name) L.push('', `收件人 ${R.name}｜${R.phone||''}`, r.direct ? '直寄：地址另外私訊' : `7-11 ${R.store||''}（店號 ${R.storeId||''}）`);
+  if (R.name) L.push('', `收件人 ${R.name}｜${R.phone||''}｜${R.email||''}`, r.direct ? '直寄：地址另外私訊' : `7-11 ${R.store||''}（店號 ${R.storeId||''}）`);
   return L.join('\n');
 }
 
@@ -395,7 +397,8 @@ $('copyBtn').onclick = ()=>{
 };
 
 state.recv = state.recv || {name:'',phone:'',store:'',storeId:''};
-const RF = {rName:'name', rPhone:'phone', rStore:'store', rStoreId:'storeId'};
+if (state.recv.email===undefined) state.recv.email='';
+const RF = {rName:'name', rPhone:'phone', rEmail:'email', rStore:'store', rStoreId:'storeId'};
 Object.entries(RF).forEach(([id,k])=>{ $(id).value = state.recv[k]||''; $(id).oninput = e=>{ state.recv[k]=e.target.value.trim(); save(); }; });
 
 function makeId(){
@@ -414,6 +417,7 @@ function validate(r){
   if (np>=0) return `第 ${np+1} 件商品還沒填官網售價喔～照官網上的澳幣價格填就可以了 🩵`;
   if (!R.name) return '請幫我們填一下收件人姓名喔～';
   if (!/^09\d{8}$/.test((R.phone||'').replace(/[\s-]/g,''))) return '手機格式好像不太對，請填 09 開頭的 10 位數字喔～';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(R.email||'')) return 'Email 好像不太對，請再確認一下喔～出貨通知會寄到這裡 🩵';
   if (state.ship==='pool' && !R.store) return '請幫我們填一下 7-11 門市名稱喔～';
   if (state.ship==='pool' && !/^\d{6}$/.test(R.storeId||'')) return '7-11 店號是 6 位數字喔，再幫我們確認一下 🤍';
   return '';
@@ -423,7 +427,7 @@ $('submitBtn').onclick = async ()=>{
   const id = makeId(), R = state.recv, btn = $('submitBtn');
   const itemsText = state.items.filter(i=>String(i.link||'').trim()).map(itemLine).join('\n')
     + `\n——\n官網售價合計 ${aud(r.sumAUD)}｜試算總價 ${nt(r.total)}${r.direct?' + 運費':''}`;
-  const payload = {orderId:id, who:state.who||'', name:R.name, phone:R.phone.replace(/[\s-]/g,''),
+  const payload = {orderId:id, who:state.who||'', name:R.name, phone:R.phone.replace(/[\s-]/g,''), email:(R.email||'').trim(),
     ship: r.direct?'直寄（地址私訊）':'集運＋7-11', store: r.direct?'':R.store, storeId: r.direct?'':R.storeId,
     items: itemsText, main:r.main, acc:r.acc, discount:1, rate:CONFIG.rate, feeRate:r.fee,
     shipping: r.direct?'待物流報價':r.shipNT, priceSum: Math.round(r.sumAUD*100)/100};
