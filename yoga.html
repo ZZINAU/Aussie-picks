@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:inherit}body{margin:0;font-size:14px;font-family:system-ui,sans-serif;-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:inherit}html{scroll-behavior:smooth}body{margin:0;font-size:14px;font-family:system-ui,sans-serif;-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
 <title>瑜伽服代購下單</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,6 +88,10 @@ button{font:inherit;cursor:pointer;border-radius:8px}
 .recv{display:grid;grid-template-columns:1fr;gap:10px}
 @media (min-width:560px){.recv{grid-template-columns:1fr 1fr}}
 .req{color:var(--maroon)}
+.rulesbtn{display:grid;gap:2px;justify-items:start;text-decoration:none;color:var(--ink);background:var(--soft);border:2px solid var(--accent);border-radius:12px;padding:12px 16px;font-weight:700;font-size:16px;max-width:520px}
+.rulesbtn span{font-weight:400;font-size:13px;color:var(--muted)}
+.rulesbtn:hover{filter:brightness(.97)}
+#rules{scroll-margin-top:16px}
 .recv .span-all{grid-column:1/-1}
 .pv{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px}
 .pv img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--soft)}
@@ -160,6 +164,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
     <div class="brand">SKIMS · lululemon · CSB　Australia → Taiwan</div>
     <h1>瑜伽服代購下單</h1>
     <div class="terms" id="terms"></div>
+    <a class="rulesbtn" href="#rules">📌 下單前請先看「代購規則」<span>運費、買手費、到貨時間都在這裡 ↓</span></a>
     <p class="note">嗨～歡迎來到 zzinau 的瑜伽服代購 🩵 SKIMS、lululemon、CSB 三個品牌可以一起下單！貼上澳洲官網的商品連結，填好顏色、尺寸、官網售價和數量，總價就會自動算出來囉～</p>
     <p class="lulunote">💡 lululemon 的特價區叫 <b>We Made Too Much</b>，不是 Sale 喔！</p>
   </header>
@@ -202,7 +207,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
         <p class="note" id="recvNote"></p>
       </section>
 
-      <section class="panel rules">
+      <section class="panel rules" id="rules">
         <h2>代購規則</h2>
         <ol id="rulesList"></ol>
         <table class="shiptable" id="shipTable"></table>
