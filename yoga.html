@@ -185,7 +185,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
           <label class="opt" id="optPool"><input type="radio" name="ship" id="shipPool" value="pool" checked>
             <div><strong>集運回台 + 7-11 店到店</strong><small>運費固定，已含在總價裡。全部商品到齊後一起寄回台灣。</small></div></label>
           <label class="opt" id="optDirect"><input type="radio" name="ship" id="shipDirect" value="direct">
-            <div><strong>直寄到府</strong><small id="directHint">滿 10 件（含小配件）才能選。</small></div></label>
+            <div><strong>直寄到府</strong><small id="directHint">商品金額滿 NT$10,000 才能選。</small></div></label>
         </div>
       </section>
 
@@ -244,10 +244,10 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
 /* ===== Karoline 每次活動只要改這裡 ===== */
 const CONFIG = {
   rate: 23,              // 匯率 A$1 = NT$
-  feeSmall: 0.13,        // 衣服/褲 1–9 件
-  feeLarge: 0.10,        // 衣服/褲 10 件以上
-  largeFrom: 10,
-  directMin: 10,         // 直寄門檻（含小配件）
+  feeSmall: 0.13,        // 商品金額未滿門檻
+  feeLarge: 0.10,        // 商品金額滿門檻
+  largeFrom: 13000,      // 買手費 10% 門檻（商品台幣金額，不含買手費、運費）
+  directMin: 10000,      // 直寄門檻（商品台幣金額）
   storeFee: 60,          // 7-11 店到店（每單）
   orderUrl: 'https://script.google.com/macros/s/AKfycbyUvSzmc3Oych1pr1iLUY4Mk6va5gaF6bh-FRVivQtCvmljDMGDyGxU-lJp5RlSj5sU/exec'
 };
@@ -315,25 +315,25 @@ function calc(){
     shipItems += c.ship*q;
     const pr = priceOf(it); if (pr==null) missing++; else sumAUD += pr*q;
   }
-  const fee = main >= CONFIG.largeFrom ? CONFIG.feeLarge : CONFIG.feeSmall;
   const goodsNT = Math.ceil(sumAUD*CONFIG.rate);
+  const fee = goodsNT >= CONFIG.largeFrom ? CONFIG.feeLarge : CONFIG.feeSmall;
   const feeNT = Math.ceil(goodsNT*fee);
-  const direct = state.ship==='direct' && all >= CONFIG.directMin;
+  const direct = state.ship==='direct' && goodsNT >= CONFIG.directMin;
   const shipNT = all===0 ? 0 : (direct ? null : CONFIG.storeFee + shipItems);
   return {fee, main, all, acc: all-main, direct, shipNT, sumAUD, goodsNT, feeNT, missing, total: goodsNT+feeNT+(shipNT||0)};
 }
 
 function update(){
   const r = calc();
-  if (state.ship==='direct' && r.all < CONFIG.directMin) state.ship='pool';
-  const canDirect = r.all >= CONFIG.directMin;
+  if (state.ship==='direct' && r.goodsNT < CONFIG.directMin) state.ship='pool';
+  const canDirect = r.goodsNT >= CONFIG.directMin;
   $('shipDirect').disabled = !canDirect;
   $('optDirect').classList.toggle('off', !canDirect);
   $('shipPool').checked = state.ship==='pool'; $('shipDirect').checked = state.ship==='direct';
   $('optPool').classList.toggle('on', state.ship==='pool'); $('optDirect').classList.toggle('on', state.ship==='direct');
   ['lStore','lStoreId'].forEach(id=>$(id).hidden = state.ship==='direct');
   $('recvNote').textContent = state.ship==='direct' ? '直寄到府：送出訂單後，再私訊我們收件地址就可以囉～運費會依物流報價另計 🤍' : '不知道店號嗎？可以到 7-11 電子地圖（emap.pcsc.com.tw）查詢，店號是 6 位數字喔！';
-  $('directHint').textContent = canDirect ? '運費依物流實際報價另計，需要先付清商品全款喔～' : `滿 ${CONFIG.directMin} 件（含小配件）就可以選喔！目前 ${r.all} 件`;
+  $('directHint').textContent = canDirect ? '運費依物流實際報價另計，需要先付清商品全款喔～' : `商品金額滿 ${nt(CONFIG.directMin)} 就可以選喔！目前 ${nt(r.goodsNT)}`;
 
   $('lines').innerHTML = `
     <div class="line"><span>件數</span><span>${r.main} 件＋配件 ${r.acc}</span></div>
@@ -345,7 +345,7 @@ function update(){
   $('formula').textContent = r.missing ? `還有 ${r.missing} 件商品沒填官網售價喔，填好總價就會更新 🤍` : '價格依你填的官網售價試算，實際以結帳金額為準喔～';
   const msgs = [];
   if (r.direct) msgs.push('直寄小提醒：需要先付清商品全款，運費會在寄出當天依物流報價通知你，付款後就幫你寄出 🤍 收件人也要先完成 EZ WAY 實名認證喔！');
-  if (r.main>0 && r.main<CONFIG.largeFrom && CONFIG.largeFrom-r.main<=4) msgs.push(`衣服／褲子再買 ${CONFIG.largeFrom-r.main} 件，買手費就降到 ${pct(CONFIG.feeLarge)} 喔 🩵`);
+  if (r.goodsNT>0 && r.goodsNT<CONFIG.largeFrom && CONFIG.largeFrom-r.goodsNT<=5000) msgs.push(`商品金額再加 ${nt(CONFIG.largeFrom-r.goodsNT)}，買手費就降到 ${pct(CONFIG.feeLarge)} 喔 🩵`);
   $('alert').hidden = !msgs.length; $('alert').innerHTML = msgs.map(esc).join('<br>');
   save();
 }
@@ -441,15 +441,15 @@ $('brandlinks').innerHTML = BRANDS.map(b=>`<a class="alolink" href="${b.url}" ta
 $('terms').innerHTML = [
   `匯率 <b>${CONFIG.rate}</b>`,
   `買手費 <b>${pct(CONFIG.feeSmall)}</b>`,
-  `衣服褲子滿 ${CONFIG.largeFrom} 件 <b>${pct(CONFIG.feeLarge)}</b>`
+  `滿 ${nt(CONFIG.largeFrom)} <b>${pct(CONFIG.feeLarge)}</b>`
 ].map(s=>`<span class="chip">${s}</span>`).join('');
 $('rulesList').innerHTML = [
-  `買手費 ${pct(CONFIG.feeSmall)}；衣服、褲子買滿 ${CONFIG.largeFrom} 件，買手費降到 ${pct(CONFIG.feeLarge)} 🩵 內褲、襪子、帽子、髮圈、腰包這些小配件不算件數喔。`,
-  'SKIMS、lululemon、CSB 三個品牌可以一起下單、一起計算件數～',
+  `買手費 ${pct(CONFIG.feeSmall)}；商品金額（不含買手費和運費）滿 ${nt(CONFIG.largeFrom)}，買手費降到 ${pct(CONFIG.feeLarge)} 🩵 小配件也一起算進金額喔！`,
+  'SKIMS、lululemon、CSB 三個品牌可以一起下單、金額一起計算～',
   '官網售價請填澳洲官網上顯示的澳幣價格（有特價就填特價後的價格）。lululemon 的特價區叫「We Made Too Much」，不是 Sale 喔！',
   '我們會先統一集運回台灣，再用 7-11 店到店寄給你 🤍 運費照下面的表固定計算，一開始就看得到。',
   '集運要等全部商品到齊才會一起寄出，時間會比直寄久一點，沒辦法個別提早寄，再請多多包涵～',
-  `買滿 ${CONFIG.directMin} 件（含小配件）就可以選直寄到府：需要先付清商品全款，運費在寄出當天依物流報價通知，付款後就幫你寄出。收件人要先完成 EZ WAY 實名認證喔！`,
+  `商品金額滿 ${nt(CONFIG.directMin)} 就可以選直寄到府：需要先付清商品全款，運費在寄出當天依物流報價通知，付款後就幫你寄出。收件人要先完成 EZ WAY 實名認證喔！`,
   '顏色和尺寸請照澳洲官網上的寫法填，我們一律以你在下單網頁上填的為準 🩵',
   '下單流程：先按「複製明細」保存 → 送出訂單 → 截圖私訊 LINE 官方帳號跟我們核對商品。核對沒問題後，會告訴你總價和轉帳資訊，收到款項就馬上幫你下單 🤎'
 ].map(s=>`<li>${esc(s)}</li>`).join('');
