@@ -237,7 +237,7 @@ a.primary{display:block;text-align:center;text-decoration:none;box-sizing:border
 <script>
 /* ===== Karoline 每次活動只要改這裡 ===== */
 const CONFIG = {
-  mode: 'presale',          // 'presale' = 活動還沒開始（預購期）：填官網原價 × 預估折扣
+  mode: 'sale',             // 'presale' = 活動還沒開始（預購期）：填官網原價 × 預估折扣
                          // 'sale'    = 活動已開始、官網已顯示特價：直接用官網售價，不再打折
   presaleDiscount: 0.30, // 預購期的預估折扣（0.30 = 打七折）
   rate: 23,              // 匯率 A$1 = NT$
@@ -265,7 +265,7 @@ const PRE = CONFIG.mode === 'presale';
 CONFIG.discount = PRE ? CONFIG.presaleDiscount : 0;
 const LBL = PRE ? '官網原價' : '官網售價';
 const zhe = () => Math.round((1-CONFIG.discount)*100)/10;
-const KEY = 'alo-order-v6';
+const KEY = 'alo-order-v7';
 const blank = () => ({link:'',color:'',size:'',qty:1,cat:'light',price:''});
 
 let state = {who:'', ship:'pool', items:[blank()]};
